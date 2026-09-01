@@ -24,7 +24,10 @@ def main():
     X_train = vectorizer.fit_transform(train_df["sentence"])
     X_val = vectorizer.transform(val_df["sentence"])
 
-    model = LogisticRegression(max_iter=1000)
+    model = LogisticRegression(
+    max_iter=1000,
+    class_weight="balanced"
+)
     model.fit(X_train, train_df["label"])
 
     predictions = model.predict(X_val)
