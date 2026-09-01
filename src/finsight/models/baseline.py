@@ -19,8 +19,9 @@ def load_data():
 def main():
     train_df, val_df = load_data()
 
-    vectorizer = TfidfVectorizer()
-
+    vectorizer = TfidfVectorizer(
+    ngram_range=(1, 2)
+)
     X_train = vectorizer.fit_transform(train_df["sentence"])
     X_val = vectorizer.transform(val_df["sentence"])
 
