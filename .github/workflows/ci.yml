@@ -19,11 +19,11 @@ jobs:
           cache: pip
           cache-dependency-path: pyproject.toml
       - name: Install core and test dependencies
-        run: python -m pip install -e '.[api,dev]'
+        run: python -m pip install -e '.[api,dev,intelligence]'
       - name: Unit tests (offline fixtures)
         run: python -m pytest -q
       - name: Check syntax
-        run: python -m compileall -q src
+        run: python -m compileall -q src intelligence_dashboard.py
 
   notebook-smoke:
     runs-on: ubuntu-latest
