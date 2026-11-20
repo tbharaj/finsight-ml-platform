@@ -9,6 +9,20 @@ FinSight studies whether a financial headline can be classified as **negative**,
 
 > **Project status:** Research / portfolio project, not a production trading or investment system. The new baseline has offline unit tests; a full benchmark on the remote Financial PhraseBank dataset is **not claimed** until someone runs the training command and inspects the saved report. No financial returns or predictive advantage are claimed.
 
+## FinSight Intelligence — Company Research & Valuation (research prototype)
+
+[Launch guide and methodology](docs/COMPANY_RESEARCH.md) · [Interactive Streamlit dashboard](intelligence_dashboard.py) · [Companion Jupyter notebook](notebooks/FinSight_Company_Intelligence.ipynb)
+
+The optional **FinSight Intelligence** application explores a **user-selected listed company** using dated adjusted closing prices, available summary financials and linked recent GDELT news. Users choose a **1–60 month horizon** and explicit EPS-growth and terminal-P/E assumptions. It produces **separate** earnings-multiple valuation scenarios and historical-return distribution quantiles. A walk-forward interval diagnostic is shown only when sufficient past data exist. News sentiment requires a separately trained local FinSight model and **never automatically changes a price target**. Coverage is not guaranteed across every market or industry; missing data are labelled unavailable.
+
+```bash
+python -m pip install -e '.[intelligence]'
+python -m streamlit run intelligence_dashboard.py
+# or: python -m jupyter lab notebooks/FinSight_Company_Intelligence.ipynb
+```
+
+This research tool **does not forecast expected returns with verified accuracy**, supply live prices, provide investment recommendations, or fetch and reconcile official SEC filings. See the [research limitations, provenance and primary-source references](docs/COMPANY_RESEARCH.md).
+
 ## What is implemented?
 
 | Component | Status | Entry point |
