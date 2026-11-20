@@ -37,3 +37,8 @@ sequenceDiagram
 ## Security and deployment
 
 The default service is intended for `127.0.0.1`. The API has no auth/rate limiting and should not be exposed to public traffic as-is. Treat joblib model files as executable-code-capable serialized objects, never as safe user uploads. Keep the dataset's noncommercial licensing separate from the repository's MIT code licence.
+
+
+## Source annotation conflicts
+
+The source can contain multiple sentiment labels for the same normalised headline. To avoid silently inventing a gold label, the baseline excludes **all** occurrences of a headline with contradictory labels across the complete source, before deduplication and model fitting. `evaluation.json` records the count of excluded headline keys and rows per original split. This policy changes the evaluated population and should be disclosed alongside any reported metrics.
