@@ -28,6 +28,7 @@ div[data-testid="stAlert"] {border-radius: 10px}
 
 st.caption("FINSIGHT   /   RESEARCH TERMINAL")
 st.title("Company Intelligence")
+st.page_link("pages/1_Paper_Trading_Desk.py", label="Open Paper Trading Desk (PAPER ONLY)", icon="🧪")
 st.markdown("**An evidence-led financial research workspace.** Prices, fundamentals, dated headlines and transparent valuation assumptions—without pretending uncertainty disappears.")
 st.info("**Research use only.** Not a recommendation, financial advice, or a reliable prediction of future returns. Market prices are delayed historical closes; news may contain irrelevant or duplicated coverage.")
 

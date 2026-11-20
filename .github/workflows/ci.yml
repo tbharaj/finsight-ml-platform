@@ -23,7 +23,7 @@ jobs:
       - name: Unit tests (offline fixtures)
         run: python -m pytest -q
       - name: Check syntax
-        run: python -m compileall -q src intelligence_dashboard.py
+        run: python -m compileall -q src pages intelligence_dashboard.py
 
   notebook-smoke:
     runs-on: ubuntu-latest
