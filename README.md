@@ -5,9 +5,23 @@
 [![Python quality checks](https://github.com/tbharaj/finsight-ml-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/tbharaj/finsight-ml-platform/actions/workflows/ci.yml)
 [![MIT License](https://img.shields.io/badge/code%20license-MIT-172b4d.svg)](LICENSE)
 
-FinSight studies whether a financial headline can be classified as **negative**, **neutral**, or **positive**. The repository combines the existing exploratory neural-network and DistilBERT experiments with a **reproducible, end-to-end reference baseline**: data validation, duplicate-aware holdout handling, TF–IDF and logistic regression, majority-class benchmarking, JSON evaluation reports, model export, and an optional inference API.
+FinSight studies whether a financial headline can be classified as **negative**, **neutral**, or **positive**. The repository combines the existing exploratory neural-network and DistilBERT experiments with a **reproducible, end-to-end reference baseline**: data validation, global conflicting-label exclusion, duplicate-aware holdout handling, TF–IDF and logistic regression, majority-class benchmarking, JSON evaluation reports, model export, and an optional inference API.
 
 > **Project status:** Research / portfolio project, not a production trading or investment system. The new baseline has offline unit tests; a full benchmark on the remote Financial PhraseBank dataset is **not claimed** until someone runs the training command and inspects the saved report. No financial returns or predictive advantage are claimed.
+
+## FinSight Intelligence — Company Research & Valuation (research prototype)
+
+[Launch guide and methodology](docs/COMPANY_RESEARCH.md) · [Interactive Streamlit dashboard](intelligence_dashboard.py) · [Companion Jupyter notebook](notebooks/FinSight_Company_Intelligence.ipynb)
+
+The optional **FinSight Intelligence** application explores a **user-selected listed company** using dated adjusted closing prices, available summary financials and linked recent GDELT news. Users choose a **1–60 month horizon** and explicit EPS-growth and terminal-P/E assumptions. It produces **separate** earnings-multiple valuation scenarios and historical-return distribution quantiles. A walk-forward interval diagnostic is shown only when sufficient past data exist. News sentiment requires a separately trained local FinSight model and **never automatically changes a price target**. Coverage is not guaranteed across every market or industry; missing data are labelled unavailable.
+
+```bash
+python -m pip install -e '.[intelligence]'
+python -m streamlit run intelligence_dashboard.py
+# or: python -m jupyter lab notebooks/FinSight_Company_Intelligence.ipynb
+```
+
+This research tool **does not forecast expected returns with verified accuracy**, supply live prices, provide investment recommendations, or fetch and reconcile official SEC filings. See the [research limitations, provenance and primary-source references](docs/COMPANY_RESEARCH.md).
 
 ## What is implemented?
 
@@ -54,7 +68,7 @@ python -m pytest -q
 python -m finsight train --output-dir artifacts
 ```
 
-The training command writes `artifacts/evaluation.json` and `artifacts/sentiment_model.joblib`. **Inspect the generated values; the README deliberately reports no fabricated metrics.** The model is trained on the training split, compared on validation and test, and benchmarked against a majority-class predictor. Exact-text overlap across splits is removed with held-out examples prioritised; the report records row counts before and after cleaning. The test split must not be used for hyperparameter selection.
+The training command writes `artifacts/evaluation.json` and `artifacts/sentiment_model.joblib`. **Inspect the generated values; the README deliberately reports no fabricated metrics.** The model is trained on the training split, compared on validation and test, and benchmarked against a majority-class predictor. Exact-text overlap across splits is removed with held-out examples prioritised. Headline text associated with contradictory labels anywhere in the source is excluded from all splits rather than assigned an arbitrary label. The report records raw row counts, conflicting headline/row exclusions and cleaned split sizes. The test split must not be used for hyperparameter selection.
 
 Prediction from a trusted model you've trained locally:
 
@@ -68,11 +82,25 @@ curl -s http://127.0.0.1:8000/predict \
 
 The API returns a class label and class probabilities. `GET /health` returns API health. The service has **no market-data feeds, brokerage credentials, trading controls or execution endpoints**. Do not expose this demonstration service directly to the public internet without authentication, rate limiting and operational hardening.
 
+## Interactive Jupyter notebook — start here
+
+For a guided financial-headline sentiment workflow covering source-data auditing, training, holdout evaluation, confusion matrices, model features and headline predictions, use the **[FinSight interactive notebook](notebooks/FinSight_Financial_Sentiment.ipynb)**.
+
+```bash
+# Run from the project root after activating the virtual environment
+python -m pip install -e '.[data,notebook]'
+python -m jupyter lab notebooks/FinSight_Financial_Sentiment.ipynb
+```
+
+Select the project's Python kernel, then **Run → Run All Cells**. The notebook reuses the packaged FinSight pipeline rather than duplicating modelling logic. A real-data run writes `artifacts/evaluation.json` and `artifacts/sentiment_model.joblib`, enabling subsequent CLI prediction. To run a *synthetic, offline* demonstration instead, start Jupyter after `export FINSIGHT_NOTEBOOK_SOURCE=synthetic`. Do **not** report synthetic scores as actual results.
+
+The company-headline worksheet only classifies manually supplied text: it does not fetch live news, value companies or forecast returns.
+
 ## Research design and evaluation
 
 - **Dataset:** [Financial PhraseBank on Hugging Face](https://huggingface.co/datasets/lmassaron/FinancialPhraseBank). The dataset contains labelled financial news headlines and lists a **CC BY-NC-SA 4.0** data licence. This licence is separate from the code's MIT licence; check its restrictions before reuse, particularly commercial use. We do not redistribute the dataset.
 - **Labels:** `0 = negative`, `1 = neutral`, `2 = positive`, as defined by the source dataset.
-- **Splits:** preserve the upstream train/validation/test splits when all three are supplied; otherwise make a deterministic stratified 70/15/15 split. Verify text overlap and remove exact duplicates without letting the same headline appear in multiple splits.
+- **Splits:** preserve the upstream train/validation/test splits when all three are supplied; otherwise make a deterministic stratified 70/15/15 split. Drop all annotations for any normalised headline with conflicting labels, then remove exact duplicates and overlapping headlines across splits. The report documents exclusions and final sample sizes.
 - **Baseline:** word unigram/bigram TF–IDF features and class-balanced logistic regression, compared with a majority-class baseline.
 - **Metrics:** accuracy, macro-F1, balanced accuracy and a 3×3 confusion matrix, on validation and test sets. Metrics are exported, not hard-coded.
 - **Caveats:** classifying labelled news text is **not** forecasting asset returns. Editorial selection, historical periods, domain shift, annotation disagreement and dataset duplicates can affect apparent quality.
