@@ -68,6 +68,20 @@ curl -s http://127.0.0.1:8000/predict \
 
 The API returns a class label and class probabilities. `GET /health` returns API health. The service has **no market-data feeds, brokerage credentials, trading controls or execution endpoints**. Do not expose this demonstration service directly to the public internet without authentication, rate limiting and operational hardening.
 
+## Interactive Jupyter notebook — start here
+
+For a guided financial-headline sentiment workflow covering source-data auditing, training, holdout evaluation, confusion matrices, model features and headline predictions, use the **[FinSight interactive notebook](notebooks/FinSight_Financial_Sentiment.ipynb)**.
+
+```bash
+# Run from the project root after activating the virtual environment
+python -m pip install -e '.[data,notebook]'
+python -m jupyter lab notebooks/FinSight_Financial_Sentiment.ipynb
+```
+
+Select the project's Python kernel, then **Run → Run All Cells**. The notebook reuses the packaged FinSight pipeline rather than duplicating modelling logic. A real-data run writes `artifacts/evaluation.json` and `artifacts/sentiment_model.joblib`, enabling subsequent CLI prediction. To run a *synthetic, offline* demonstration instead, start Jupyter after `export FINSIGHT_NOTEBOOK_SOURCE=synthetic`. Do **not** report synthetic scores as actual results.
+
+The company-headline worksheet only classifies manually supplied text: it does not fetch live news, value companies or forecast returns.
+
 ## Research design and evaluation
 
 - **Dataset:** [Financial PhraseBank on Hugging Face](https://huggingface.co/datasets/lmassaron/FinancialPhraseBank). The dataset contains labelled financial news headlines and lists a **CC BY-NC-SA 4.0** data licence. This licence is separate from the code's MIT licence; check its restrictions before reuse, particularly commercial use. We do not redistribute the dataset.
