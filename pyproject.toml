@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "finsight-ml-platform"
+version = "0.2.0"
+description = "Reproducible financial-news sentiment research with baseline models and an optional inference API"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+authors = [{name = "Taran Bharaj"}]
+dependencies = [
+  "pandas>=2.0,<3",
+  "scikit-learn>=1.3,<2",
+  "joblib>=1.3,<2",
+]
+
+[project.optional-dependencies]
+data = ["datasets>=2.20,<5"]
+api = ["fastapi>=0.110,<1", "uvicorn>=0.29,<1"]
+research = ["torch>=2.2,<3", "transformers>=4.40,<5"]
+dev = ["pytest>=8,<10", "httpx>=0.27,<1"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
