@@ -223,8 +223,3 @@ artifacts/
 *.pem
 *.key
 
-
-# FinSight simulated portfolio state (never commit user paper orders)
-artifacts/*.sqlite3
-artifacts/*.sqlite3-shm
-artifacts/*.sqlite3-wal
