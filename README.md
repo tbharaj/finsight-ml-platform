@@ -9,14 +9,6 @@ FinSight studies whether a financial headline can be classified as **negative**,
 
 > **Project status:** Research / portfolio project, not a production trading or investment system. The new baseline has offline unit tests; a full benchmark on the remote Financial PhraseBank dataset is **not claimed** until someone runs the training command and inspects the saved report. No financial returns or predictive advantage are claimed.
 
-## Paper Trading Desk (PAPER ONLY)
-
-**[Open the paper trading guide](docs/PAPER_TRADING.md)** · **[Simulator source](pages/1_Paper_Trading_Desk.py)** · **[Deterministic risk gate](src/finsight/trading/core.py)**
-
-FinSight has a second Streamlit page: **Paper Trading Desk**. Enter a US-listed USD equity ticker to view the last completed daily close, inspect a closed-candle moving-average crossover and optionally enter manually approved **synthetic paper fills** in a local SQLite account. It starts **PAUSED** on every new session; paper orders require a separate explicit confirmation, pass independent deterministic checks and leave an audit trail. There are **no broker connections, real trades, unattended trading loops or validated profits**. This is a standalone educational simulator—not the separate `AI-Trading-Desk` repository.
-
-To access it, clone this repository, install `python -m pip install -e '.[intelligence,dev]'`, start `python -m streamlit run intelligence_dashboard.py`, open the local URL (typically `http://localhost:8501`), then select **Paper Trading Desk** in the Streamlit sidebar. **There is no hosted public URL.** [Full setup, controls and risk limitations](docs/PAPER_TRADING.md).
-
 ## FinSight Intelligence — Company Research & Valuation (research prototype)
 
 [Launch guide and methodology](docs/COMPANY_RESEARCH.md) · [Interactive Streamlit dashboard](intelligence_dashboard.py) · [Companion Jupyter notebook](notebooks/FinSight_Company_Intelligence.ipynb)
