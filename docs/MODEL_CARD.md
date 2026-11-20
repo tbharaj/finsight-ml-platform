@@ -33,3 +33,8 @@ There is no broker integration, live order submission, trade automation, user da
 ## Citations
 
 See [references](REFERENCES.md) for dataset, modelling framework and transformer references.
+
+
+## Source annotation conflicts
+
+The source can contain multiple sentiment labels for the same normalised headline. To avoid silently inventing a gold label, the baseline excludes **all** occurrences of a headline with contradictory labels across the complete source, before deduplication and model fitting. `evaluation.json` records the count of excluded headline keys and rows per original split. This policy changes the evaluated population and should be disclosed alongside any reported metrics.
